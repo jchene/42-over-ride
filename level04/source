@@ -12,7 +12,7 @@ int main(void)
 	int childStatus;
 	char shellcode[128];
 	int syscallNumber;
-	__pid_t childPid;
+	int childPid;
 
 	childPid = fork();
 	memset(shellcode, 0, sizeof(shellcode));

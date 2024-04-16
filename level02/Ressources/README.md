@@ -1,4 +1,4 @@
-# LEVEL02 - FORMAT STRING EXPLOITATION 1
+# LEVEL02 - FORMAT STRING EXPLOITATION 1 - READ MEMORY
 
 We have a binary named level02 at /home/users/level02/
 

@@ -15,11 +15,11 @@ Each level in the project has the following structure:
 
 Here is a list of the topics covered by each level:
 
-- [Level 00 - PLAIN PASSWORD](./level00/)
-- [Level 01 - STACK BUFFER OVERFLOW 1](./level01/)
-- [Level 02 - FORMAT STRING EXPLOITATION 1](./level02/)
-- [Level 03 - ENCRYPTED PASSWORD](./level03/)
-- [Level 04 - STACK BUFFER OVERFLOW 2 (SYSCALL BAN)](./level04/)
+- [Level 00 - REVERSE 1 - PLAIN PASSWORD](./level00/)
+- [Level 01 - STACK BUFFER OVERFLOW 1 - SHELLCODE](./level01/)
+- [Level 02 - FORMAT STRING EXPLOITATION 1 - READ MEMORY](./level02/)
+- [Level 03 - REVERSE 2 - ENCRYPTED PASSWORD](./level03/)
+- [Level 04 - STACK BUFFER OVERFLOW 2 - SYSCALL BAN](./level04/)
 - [Level 05 - ](./level05/)
 - [Level 06 - ](./level06/)
 - [Level 07 - ](./level07/)

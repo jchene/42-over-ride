@@ -1,4 +1,4 @@
-# LEVEL03 - ENCRYPTED PASSWORD
+# LEVEL03 - REVERSE 2 - ENCRYPTED PASSWORD
 
 We have a binary named level03 at /home/users/level03/
 

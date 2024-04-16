@@ -1,4 +1,4 @@
-# LEVEL04 - STACK BUFFER OVERFLOW 2 (SYSCALL BAN)
+# LEVEL04 - STACK BUFFER OVERFLOW 2 - SYSCALL BAN
 
 We have a binary named level04 at /home/users/level04/
 

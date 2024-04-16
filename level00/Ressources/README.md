@@ -1,4 +1,4 @@
-# LEVEL00 - PLAIN PASSWORD
+# LEVEL00 - REVERSE 1 - PLAIN PASSWORD
 
 We have a binary named level00 at /home/users/level00/
 
