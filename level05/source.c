@@ -1,16 +1,20 @@
-int __cdecl __noreturn main(int argc, const char **argv, const char **envp)
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(void)
 {
-  char s[100]; // [esp+28h] [ebp-70h] BYREF
-  unsigned int i; // [esp+8Ch] [ebp-Ch]
+  char string[100];
+  unsigned int i;
 
   i = 0;
-  fgets(s, 100, stdin);
-  for ( i = 0; i < strlen(s); ++i )
+  fgets(string, 100, stdin);
+  for ( i = 0; i < strlen(string); ++i )
   {
-    if ( s[i] > 64 && s[i] <= 90 )
-      s[i] ^= 0x20u;
+    if ( string[i] >= 'A' && string[i] <= 'Z' )
+      string[i] ^= 0b00100000;
   }
-  printf(s);
+  printf(string);
   exit(0);
 }
 

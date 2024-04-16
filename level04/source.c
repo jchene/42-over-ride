@@ -7,7 +7,7 @@
 #define EXECVE_SYSCALL 11
 #define EIP_OFFSET 44
 
-int main(int argc, const char **argv, const char **envp)
+int main(void)
 {
 	int childStatus;
 	char shellcode[128];
